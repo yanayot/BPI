@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שאלון BPI - יותם ינאי</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --success-green: #27ae60;
+            --danger-red: #c0392b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 15px;
+            color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        /* עיצוב המותג בפינה הימנית - טקסט בלבד */
+        .brand-box {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            text-align: right;
+            direction: rtl;
+        }
+
+        .brand-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 0;
+            display: block;
+        }
+
+        .brand-subtext {
+            font-size: 11px;
+            color: #7f8c8d;
+            margin: 0;
+            display: block;
+            white-space: nowrap;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 65px; /* מותאם כדי שלא יחפוף למיתוג בפינה */
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        h1 {
+            font-size: 26px;
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .patient-info {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .input-group { display: flex; flex-direction: column; }
+        
+        input[type="text"], input[type="date"] {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+        }
+
+        .section-title {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 30px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .question {
+            margin: 25px 0;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: block;
+            font-size: 17px;
+        }
+
+        .scale { display: flex; justify-content: space-between; gap: 4px; }
+        .scale-item { flex: 1; }
+        .scale-item input { display: none; }
+        .scale-item label {
+            display: flex; align-items: center; justify-content: center;
+            height: 45px; background: #f0f0f0; border-radius: 5px;
+            cursor: pointer; font-weight: bold; border: 1px solid #ddd;
+        }
+
+        .scale-item input:checked + label {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .label-right { color: var(--success-green); } /* צד ה-0 */
+        .label-left { color: var(--danger-red); }   /* צד ה-10 */
+
+        .buttons-container {
+            margin-top: 40px;
+            display: grid;
+            gap: 15px;
+        }
+
+        button {
+            padding: 18px; border: none; border-radius: 12px;
+            font-size: 18px; font-weight: bold; cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-email { background-color: #27ae60; color: white; }
+        .btn-pdf { background-color: #e67e22; color: white; }
+        button:active { transform: scale(0.98); }
+
+        #results-summary {
+            display: none; margin: 25px 0; padding: 20px;
+            background: #e8f4fd; border: 2px solid var(--accent-color);
+            border-radius: 12px; text-align: center;
+        }
+
+        @media print {
+            .buttons-container { display: none; }
+            .container { box-shadow: none; border: none; width: 100%; }
+            .brand-box { position: absolute; right: 0; top: 0; }
+        }
+
+        @media (max-width: 500px) {
+            h1 { font-size: 20px; }
+            .brand-box { position: static; text-align: center; margin-bottom: 20px; }
+            .header { margin-top: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="brand-box">
+        <span class="brand-name">יותם ינאי</span>
+        <span class="brand-subtext">פיזיותרפיה וטיפול בכאב כרוני</span>
+    </div>
+
+    <div class="header">
+        <h1>Brief Pain Inventory</h1>
+    </div>
+
+    <div class="patient-info">
+        <div class="input-group">
+            <label>שם המטופל:</label>
+            <input type="text" id="patientName" placeholder="הכנס שם מלא">
+        </div>
+        <div class="input-group">
+            <label>תאריך:</label>
+            <input type="date" id="testDate">
+        </div>
+    </div>
+
+    <div class="section-title">חומרת כאב (Pain Severity)</div>
+    <div id="severity-questions"></div>
+
+    <div class="section-title">הפרעה לתפקוד (Pain Interference)</div>
+    <div id="interference-questions"></div>
+
+    <div id="results-summary">
+        <h3 style="margin-top:0">סיכום</h3>
+        <p id="severity-res" style="font-size:18px; margin:5px 0;"></p>
+        <p id="interference-res" style="font-size:18px; margin:5px 0;"></p>
+    </div>
+
+    <div class="buttons-container">
+        <button class="btn-email" onclick="handleAction('email')">שלח תוצאות למרפאה</button>
+        <button class="btn-pdf" onclick="handleAction('pdf')">שמור כסיכום PDF</button>
+    </div>
+</div>
+
+<script>
+    document.getElementById('testDate').valueAsDate = new Date();
+
+    const severityData = [
+        { q: "1. מהו הכאב הגרוע ביותר בשבוע האחרון?", min: "אין כאב", max: "בלתי נסבל" },
+        { q: "2. מהו הכאב הקל ביותר בשבוע האחרון?", min: "אין כאב", max: "בלתי נסבל" },
+        { q: "3. מהו הכאב הממוצע בשבוע האחרון?", min: "אין כאב", max: "בלתי נסבל" },
+        { q: "4. כיצד היית מדרג את הכאב שלך כעת?", min: "אין כאב", max: "בלתי נסבל" }
+    ];
+
+    const interferenceData = [
+        { q: "6. פעילות כללית", min: "פעיל כרגיל", max: "לא פעיל בכלל" },
+        { q: "7. מצב רוח", min: "כרגיל", max: "אין לי מצב רוח" },
+        { q: "8. כושר הליכה", min: "הולך כרגיל", max: "לא יכול ללכת" },
+        { q: "9. עבודה שגרתית (בבית ומחוצה לו)", min: "עובד כרגיל", max: "לא יכול לעבוד" },
+        { q: "10. מערכת יחסים עם אנשים", min: "כרגיל", max: "הפרעה מוחלטת" },
+        { q: "11. שינה", min: "ישן כרגיל", max: "לא יכול לישון" },
+        { q: "12. הנאה מהחיים", min: "נהנה כרגיל", max: "לא נהנה בכלל" }
+    ];
+
+    function createScale(data, idPrefix, containerId) {
+        const container = document.getElementById(containerId);
+        data.forEach((item, index) => {
+            const qDiv = document.createElement('div');
+            qDiv.className = 'question';
+            let html = `<span class="question-text">${item.q}</span><div class="scale">`;
+            for (let i = 0; i <= 10; i++) {
+                html += `
+                    <div class="scale-item">
+                        <input type="radio" name="${idPrefix}_${index}" id="${idPrefix}_${index}_${i}" value="${i}">
+                        <label for="${idPrefix}_${index}_${i}">${i}</label>
+                    </div>`;
+            }
+            html += `</div><div class="scale-labels"><span class="label-right">${item.min}</span><span class="label-left">${item.max}</span></div>`;
+            qDiv.innerHTML = html;
+            container.appendChild(qDiv);
+        });
+    }
+
+    createScale(severityData, 'sev', 'severity-questions');
+    createScale(interferenceData, 'int', 'interference-questions');
+
+    function calculate() {
+        const getAvg = (prefix, count) => {
+            let sum = 0, checked = 0;
+            for(let i=0; i<count; i++) {
+                const radio = document.querySelector(`input[name="${prefix}_${i}"]:checked`);
+                if(radio) { sum += parseInt(radio.value); checked++; }
+            }
+            return checked === count ? (sum / count).toFixed(2) : null;
+        };
+        return { sev: getAvg('sev', 4), int: getAvg('int', 7) };
+    }
+
+    function handleAction(type) {
+        const res = calculate();
+        const name = document.getElementById('patientName').value.trim();
+        const date = document.getElementById('testDate').value;
+
+        if (!res.sev || !res.int) {
+            alert("יש לענות על כל השאלות בשאלון.");
+            return;
+        }
+        if (!name) {
+            alert("אנא מלא את שם המטופל.");
+            return;
+        }
+
+        document.getElementById('results-summary').style.display = 'block';
+        document.getElementById('severity-res').innerHTML = `<b>Pain Severity:</b> ${res.sev}`;
+        document.getElementById('interference-res').innerHTML = `<b>Pain Interference:</b> ${res.int}`;
+
+        if (type === 'email') {
+            const body = `שלום יותם,\n\nתוצאות שאלון BPI עבור: ${name}\nתאריך: ${date}\n\nPain Severity: ${res.sev}\nPain Interference: ${res.int}\n\nבברכה.`;
+            window.location.href = `mailto:bodysoul.pt1@gmail.com?subject=BPI Result - ${name}&body=${encodeURIComponent(body)}`;
+        } else {
+            window.print();
+        }
+    }
+</script>
+
+</body>
+</html>
